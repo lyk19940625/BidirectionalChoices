@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"  
+    xsi:schemaLocation="  
+         http://www.springframework.org/schema/beans  
+         http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  
+         http://www.springframework.org/schema/context  
+         http://www.springframework.org/schema/context/spring-context-3.1.xsd  
+         http://www.springframework.org/schema/aop    
+         http://www.springframework.org/schema/aop/spring-aop-3.1.xsd    
+         http://www.springframework.org/schema/tx    
+         http://www.springframework.org/schema/tx/spring-tx.xsd">  
+     <!-- 
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="loginInterceptor" class="interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+     -->
+    <context:component-scan base-package="com.dao.*,com.*" /> 
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" >  
+    <property name="messageConverters">   
+         <list>   
+             <bean class = "org.springframework.http.converter.StringHttpMessageConverter">   
+                <property name = "supportedMediaTypes">
+                      <list>
+                          <value>text/html;charset=UTF-8</value>   
+                     </list>   
+                </property>   
+             </bean>   
+         </list>   
+    </property>  
+    </bean>
+    <bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+    
+   <!-- <bean id="transactionManager1"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource"
+             ref="dataSource" />
+    </bean>-->
+    
+    <bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="configLocation"
+			value="classpath:hibernate.cfg.xml">
+		</property>
+	</bean>  
+	<bean id="transactionManager"
+	  class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+      <property name="sessionFactory"  ref="sessionFactory"/>
+    </bean>
+     <tx:annotation-driven transaction-manager="transactionManager"  />
+	<!-- 配置视图解析器 -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!-- <bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/graduatestudent" />
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
+	</bean> -->
+    <!--  <bean id="sessionFactory"
+ 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+			</props>
+		</property>
+	</bean> -->
+    </beans> 
